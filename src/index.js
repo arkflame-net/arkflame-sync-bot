@@ -26,7 +26,7 @@ client.on("ready", () => {
 });
 
 async function reply(message, text) {
-    message.reply(text).catch((error) => { });
+    message.reply(text).catch((error) => { message.channel.send(text).catch((error) => {  })});
 }
 
 client.on("messageCreate", async (message) => {
