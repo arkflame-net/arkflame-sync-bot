@@ -119,11 +119,11 @@ client.on("messageCreate", async (message) => {
                                 }
                             } else {
                                 replyRequisites(message);
-                                reply(message, "La description no contiene la IP (arkflame.com).");
+                                reply(message, "La description no contiene la IP `arkflame.com`.");
                             }
                         } else {
                             replyRequisites(message);
-                            reply(message, "El titulo no contiene el nombre del servidor (ArkFlame).")
+                            reply(message, "El titulo no contiene el nombre del servidor `ArkFlame`.")
                         }
                     } else {
                         replyRequisites(message);
