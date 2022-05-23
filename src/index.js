@@ -29,6 +29,10 @@ async function reply(message, text) {
     message.reply(text).catch((error) => { message.channel.send(text).catch((error) => { }) });
 }
 
+async function replyRequisites(message) {
+    reply(message, "• Debe contener el `nombre del server` en el titulo.\n• Debe contener la `IP` en la descripcion.\n• Debe durar mas de `2 minutos`.\n• Debe tener menos de `7 dias` de antiguedad.\n• Debe ser unicamente en `ArkFlame`.\n• Debe tener la categoria `Gaming`.")
+}
+
 client.on("messageCreate", async (message) => {
     if (message.author.bot) {
         return;
@@ -102,21 +106,27 @@ client.on("messageCreate", async (message) => {
                                                 reply(message, "El video debe incluir tu nick en la descripcion siguiendo el formato `nick: TuNick`.");
                                             }
                                         } else {
+                                            replyRequisites(message);
                                             reply(message, "El video debe tener menos de `7 dias` de antiguedad.")
                                         }
                                     } else {
+                                        replyRequisites(message);
                                         reply(message, "El video debe tener la categoria `Gaming`.")
                                     }
                                 } else {
+                                    replyRequisites(message);
                                     reply(message, "La duracion del video debe ser mayor a 2 minutos.")
                                 }
                             } else {
+                                replyRequisites(message);
                                 reply(message, "La description no contiene la IP (arkflame.com).");
                             }
                         } else {
+                            replyRequisites(message);
                             reply(message, "El titulo no contiene el nombre del servidor (ArkFlame).")
                         }
                     } else {
+                        replyRequisites(message);
                         reply(message, "El video debe estar declarado como `publico`.");
                     }
                 } catch (exception) {
