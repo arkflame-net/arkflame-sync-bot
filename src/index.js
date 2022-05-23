@@ -30,7 +30,7 @@ async function reply(message, text) {
 }
 
 async function replyRequisites(message) {
-    reply(message, "• Debe contener el `nombre del server` en el titulo.\n• Debe contener la `IP` en la descripcion.\n• Debe durar mas de `2 minutos`.\n• Debe tener menos de `7 dias` de antiguedad.\n• Debe ser unicamente en `ArkFlame`.\n• Debe tener la categoria `Gaming`.")
+    reply(message, "• Debe contener el `nombre del server` en el titulo.\n• Debe contener la `IP` en la descripcion.\n• Debe durar mas de `2 minutos`.\n• Debe tener menos de `7 dias` de antiguedad.\n• Debe ser unicamente en `ArkFlame`.\n• Debe tener la categoria `Gaming`.\n• Debe ser un video `publico`.")
 }
 
 client.on("messageCreate", async (message) => {
