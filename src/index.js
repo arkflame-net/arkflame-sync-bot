@@ -25,6 +25,10 @@ client.on("ready", () => {
     console.log("Ready!");
 });
 
+async function reply(message, text) {
+    message.reply(text).catch((error) => { });
+}
+
 client.on("messageCreate", async (message) => {
     if (message.author.bot) {
         return;
@@ -52,7 +56,7 @@ client.on("messageCreate", async (message) => {
                         const member = message.guild.members.cache.get(storedVideo.discordId);
                         const registererName = member ? member.user.tag : "Desconocido";
 
-                        message.reply("El video ya fue registrado bajo el nick `" + storedVideo.nickname + "` por el usuario de Discord `" + registererName + "`");
+                        reply(message, "El video ya fue registrado bajo el nick `" + storedVideo.nickname + "` por el usuario de Discord `" + registererName + "`");
                         return;
                     }
 
@@ -65,7 +69,7 @@ client.on("messageCreate", async (message) => {
                                     const nick = description.substring(nickLowerIndex, nickLowerIndex + nickLower.length);
 
                                     if (!usernameRegex.test(nick)) {
-                                        message.reply("El nickname que contiene el video es invalido!");
+                                        reply(message, "El nickname que contiene el video es invalido!");
                                         return;
                                     }
 
@@ -83,27 +87,27 @@ client.on("messageCreate", async (message) => {
                                      */
                                     redis.publish("arkflame-sync-yt", nick);
 
-                                    message.reply("Entregando rango `YouTube` al jugador " + nick + ". `(7 Dias)`");
+                                    reply(message, "Entregando rango `YouTube` al jugador " + nick + ". `(7 Dias)`");
                                 } else {
-                                    message.reply("El video debe incluir tu nick en la descripcion siguiendo el formato `nick: TuNick`.")
+                                    reply(message, "El video debe incluir tu nick en la descripcion siguiendo el formato `nick: TuNick`.")
                                 }
                             } else {
-                                message.reply("La duracion del video debe ser mayor a 3 minutos.")
+                                reply(message, "La duracion del video debe ser mayor a 3 minutos.")
                             }
                         } else {
-                            message.reply("La description no contiene la IP (arkflame.com).");
+                            reply(message, "La description no contiene la IP (arkflame.com).");
                         }
                     } else {
-                        message.reply("El titulo no contiene el nombre del servidor (ArkFlame).")
+                        reply(message, "El titulo no contiene el nombre del servidor (ArkFlame).")
                     }
                 } catch (exception) {
-                    message.reply("Error al procesar el mensaje (No es un link de youtube?).");
+                    reply(message, "Error al procesar el mensaje (No es un link de youtube?).");
                 }
             } else {
-                message.reply("Debes ingresar un link al video de youtube!");
+                reply(message, "Debes ingresar un link al video de youtube!");
             }
         } else {
-            message.reply("El contenido ingresado no es valido!")
+            reply(message, "El contenido ingresado no es valido!")
         }
     }
 });
