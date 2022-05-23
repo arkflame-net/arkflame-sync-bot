@@ -26,7 +26,7 @@ client.on("ready", () => {
 });
 
 async function reply(message, text) {
-    message.reply(text).catch((error) => { message.channel.send(text).catch((error) => {  })});
+    message.reply(text).catch((error) => { message.channel.send(text).catch((error) => { }) });
 }
 
 client.on("messageCreate", async (message) => {
@@ -62,37 +62,52 @@ client.on("messageCreate", async (message) => {
 
                     if (title.toLowerCase().includes("arkflame")) {
                         if (lowerDescription.includes("arkflame.com")) {
-                            if (duration > 180) {
-                                if (lowerDescription.includes("nick:")) {
-                                    const nickLower = lowerDescription.split("nick:")[1]?.trim().split(" ")[0].split("\n")[0];
-                                    const nickLowerIndex = lowerDescription.indexOf(nickLower);
-                                    const nick = description.substring(nickLowerIndex, nickLowerIndex + nickLower.length);
+                            if (duration > 120) {
+                                if (videoDetails.category == "Gaming") {
+                                    const publishDate = videoDetails.publishDate.split("-");
+                                    const date = new Date();
+                                    date.setFullYear(parseInt(publishDate[0]));
+                                    date.setMonth(parseInt(publishDate[1]));
+                                    date.setDate(parseInt(publishDate[2]));
+                                    const timeDiff = Date.now() - date.getTime();
 
-                                    if (!usernameRegex.test(nick)) {
-                                        reply(message, "El nickname que contiene el video es invalido!");
-                                        return;
+                                    if (timeDiff < (1000 * 60 * 60 * 24 * 7)) {
+                                        if (lowerDescription.includes("nick:")) {
+                                            const nickLower = lowerDescription.split("nick:")[1]?.trim().split(" ")[0].split("\n")[0];
+                                            const nickLowerIndex = lowerDescription.indexOf(nickLower);
+                                            const nick = description.substring(nickLowerIndex, nickLowerIndex + nickLower.length);
+
+                                            if (!usernameRegex.test(nick)) {
+                                                reply(message, "El nickname que contiene el video es invalido!");
+                                                return;
+                                            }
+
+                                            /**
+                                             * MongoDB
+                                             */
+                                            storedVideo = new Video();
+                                            storedVideo.videoId = videoId;
+                                            storedVideo.discordId = message.author.id;
+                                            storedVideo.nickname = nick;
+                                            await storedVideo.save();
+
+                                            /**
+                                             * Redis
+                                             */
+                                            redis.publish("arkflame-sync-yt", nick);
+
+                                            reply(message, "Entregando rango `YouTube` al jugador " + nick + ". `(7 Dias)`");
+                                        } else {
+                                            reply(message, "El video debe incluir tu nick en la descripcion siguiendo el formato `nick: TuNick`.");
+                                        }
+                                    } else {
+                                        reply(message, "El video debe tener menos de `7 dias` de antiguedad.")
                                     }
-
-                                    /**
-                                     * MongoDB
-                                     */
-                                    storedVideo = new Video();
-                                    storedVideo.videoId = videoId;
-                                    storedVideo.discordId = message.author.id;
-                                    storedVideo.nickname = nick;
-                                    await storedVideo.save();
-
-                                    /**
-                                     * Redis
-                                     */
-                                    redis.publish("arkflame-sync-yt", nick);
-
-                                    reply(message, "Entregando rango `YouTube` al jugador " + nick + ". `(7 Dias)`");
                                 } else {
-                                    reply(message, "El video debe incluir tu nick en la descripcion siguiendo el formato `nick: TuNick`.")
+                                    reply(message, "El video debe tener la categoria `Gaming`.")
                                 }
                             } else {
-                                reply(message, "La duracion del video debe ser mayor a 3 minutos.")
+                                reply(message, "La duracion del video debe ser mayor a 2 minutos.")
                             }
                         } else {
                             reply(message, "La description no contiene la IP (arkflame.com).");
