@@ -11,7 +11,7 @@ const usernameRegex = new RegExp("^[a-zA-Z0-9_]{2,16}$");
 const Intents = discord.Intents;
 const client = new discord.Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 
-mongoose.connect("mongodb://localhost/test");
+mongoose.connect("mongodb://localhost/database");
 
 const redis = createClient({
     url: 'redis://localhost/0'
