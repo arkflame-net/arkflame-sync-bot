@@ -9,7 +9,7 @@ dotenv.config();
 
 const usernameRegex = new RegExp("^[a-zA-Z0-9_]{2,16}$");
 const Intents = discord.Intents;
-const client = new discord.Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+const client = new discord.Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES], retryLimit: 10 });
 
 mongoose.connect("mongodb://localhost/database");
 
@@ -18,6 +18,12 @@ const redis = createClient({
 });
 
 redis.on('error', (err) => console.log('Redis Client Error', err));
+
+
+client.on("error", (e) => {
+    console.error("Bot error", e);
+});
+
 
 redis.connect();
 
